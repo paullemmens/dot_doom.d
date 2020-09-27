@@ -259,5 +259,5 @@
   (setq todotxt-file "/c/nlv19419/nextcloud/todo/todo.txt"))
 
 (setq user-full-name "Paul Lemmens"
-      user-mail-address "paul.lemmens@gmail.com")
+      user-mail-address "")
 ;; ----------------------------------------------------------------------------
