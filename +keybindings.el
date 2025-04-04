@@ -3,9 +3,13 @@
 ;; Key bindings copied from
 ;; https://github.com/robbert-vdh/dotfiles/blob/master/user/emacs/.config/doom/%2Bbindings.el
 (map!
- ;; :nv "SPC /" #'+default/search-project
+
+ ;; (Temporarily) stop F3, accidentally fired by home row modifier use on kyria,
+ ;; from starting macro recording.
+ :g [f3] nil
+
+ ;; Dedicated key (from Spacemacs) to revert buffer from disk.
  (:leader
-   :desc "Search project" "/" #'+default/search-project
    (:prefix "b"
      :desc "Revert"            "R"  #'revert-buffer))
 
@@ -16,6 +20,7 @@
    :n ", a"  #'with-editor-cancel
    :n ", k"  #'with-editor-cancel)
 
+ ;; Spacemacs muscle memory for splitting windows.
  (:after evil
    (:leader
      (:prefix "w"
@@ -25,8 +30,9 @@
        :desc "Comment/uncomment" "l" #'evilnc-comment-or-uncomment-lines))
 
    ;; https://discordapp.com/channels/406534637242810369/406554085794381833/646966897014734858
-   (:map evil-insert-state-map
-     :g "C-y" #'evil-paste-before))
+   ;; (:map (evil-insert-state-map evil-visual-state-map evil-replace-state-map)
+   ;;   "C-y" #'evil-paste-before-cursor-after)
+   )
 
  ;; Attempt quicker selection of specific windows like I had for Spacemacs.
  ;; Then rebind workspace selection to a Ctrl-Alt shortcut key.
@@ -90,19 +96,32 @@
      :nviom "C-j"    #'comint-next-input))
 
  (:after csv-mode
-   (:leader
-     (:prefix-map ("m" . "major mode")
-       (:prefix ("c" . "csv-mode")
-         :desc "align fields"      "a"  #'csv-align-fields
-         :desc "kill fields"       "d"  #'csv-kill-fields
-         :desc "toggle invisible"  "i"  #'csv-toggle-invisibility
-         :desc "forward field"     "n"  #'csv-forward-field
-         :desc "backward field"    "p"  #'csv-backward-field
-         :desc "reverse region"    "r"  #'csv-reverse-region
-         :desc "sort fields"       "sf" #'csv-sort-fields
-         :desc "sort num. fields"  "sn" #'csv-sort-numeric-fields
-         :desc "toggle desc."      "so" #'csv-toggle-descending
-         :desc "transpose"         "t"  #'csv-transpose
-         :desc "unalign fields"    "u"  #'csv-unalign-fields
-         :desc "yank fields"       "vf" #'csv-yank-fields
-         :desc "yank as table"     "vt" #'csv-yank-as-new-table)))))
+  :localleader
+  :map csv-mode-map
+  :desc "align fields"      "a"  #'csv-align-fields
+  :desc "kill fields"       "d"  #'csv-kill-fields
+  :desc "toggle invisible"  "i"  #'csv-toggle-invisibility
+  :desc "forward field"     "n"  #'csv-forward-field
+  :desc "backward field"    "p"  #'csv-backward-field
+  :desc "reverse region"    "r"  #'csv-reverse-region
+  :desc "sort fields"       "sf" #'csv-sort-fields
+  :desc "sort num. fields"  "sn" #'csv-sort-numeric-fields
+  :desc "toggle desc."      "so" #'csv-toggle-descending
+  :desc "transpose"         "t"  #'csv-transpose
+  :desc "unalign fields"    "u"  #'csv-unalign-fields
+  :desc "yank fields"       "vf" #'csv-yank-fields
+  :desc "yank as table"     "vt" #'csv-yank-as-new-table)
+
+ (:after org
+  (:prefix "g"
+   :n "h" #'outline-up-heading
+   :n "j" #'org-forward-heading-same-level
+   :n "k" #'org-backward-heading-same-level
+   :n "m" #'outline-next-visible-heading)
+  (:localleader
+   :map org-mode-map
+   :desc "super-agenda"    "u"  (lambda() (interactive) (org-agenda nil "u"))
+   (:prefix "a"
+     :desc "redisplay images" "v" #'org-redisplay-inline-images))
+   )
+)
